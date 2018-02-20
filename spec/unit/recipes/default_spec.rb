@@ -2,34 +2,38 @@
 # Cookbook:: nodejs_windows
 # Spec:: default
 #
-# Copyright:: 2018, The Authors, All Rights Reserved.
+# Copyright:: 2018, Gene Gotimer, All Rights Reserved.
 
 require 'spec_helper'
 
 describe 'nodejs_windows::default' do
-  context 'When all attributes are default, on Ubuntu 16.04' do
-    let(:chef_run) do
-      # for a complete list of available platforms and versions see:
-      # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
-      runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '16.04')
-      runner.converge(described_recipe)
-    end
+  platforms = {
+    'windows' => {
+      versions: %w(2012R2 2016),
+    },
+  }
 
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
-  end
+  platforms.each do |platform, values|
+    values[:versions].each do |version|
+      context "When all attributes are default, on #{platform} #{version}" do
+        let(:chef_run) { ChefSpec::SoloRunner.new(platform: platform, version: version).converge(described_recipe) }
 
-  context 'When all attributes are default, on CentOS 7.4.1708' do
-    let(:chef_run) do
-      # for a complete list of available platforms and versions see:
-      # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '7.4.1708')
-      runner.converge(described_recipe)
-    end
+        it 'converges successfully' do
+          expect { chef_run }.to_not raise_error
+        end
 
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
+        it 'creates a directory with windows rights' do
+          expect(chef_run).to create_directory('C:\\temp')
+        end
+
+        it 'downloads the nodejs distribution' do
+          expect(chef_run).to create_remote_file_if_missing('C:\\temp\\node-v8.9.4-x64.msi')
+        end
+
+        it 'installs nodejs' do
+          expect(chef_run).to install_windows_package('Node.js')
+        end
+      end
     end
   end
 end

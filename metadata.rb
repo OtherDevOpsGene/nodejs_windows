@@ -1,20 +1,10 @@
 name 'nodejs_windows'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
+maintainer 'Gene Gotimer'
+maintainer_email 'gene.gotimer@coveros.com'
 license 'All Rights Reserved'
-description 'Installs/Configures nodejs_windows'
-long_description 'Installs/Configures nodejs_windows'
+description 'Installs Node.js on Windows'
+long_description 'Installs Node.js on Windows'
 version '0.1.0'
+supports 'windows', '2012R2'
+supports 'windows', '2016'
 chef_version '>= 12.1' if respond_to?(:chef_version)
-
-# The `issues_url` points to the location where issues for this cookbook are
-# tracked.  A `View Issues` link will be displayed on this cookbook's page when
-# uploaded to a Supermarket.
-#
-# issues_url 'https://github.com/<insert_org_here>/nodejs_windows/issues'
-
-# The `source_url` points to the development repository for this cookbook.  A
-# `View Source` link will be displayed on this cookbook's page when uploaded to
-# a Supermarket.
-#
-# source_url 'https://github.com/<insert_org_here>/nodejs_windows'
